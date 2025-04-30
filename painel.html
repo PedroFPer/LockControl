@@ -2,30 +2,31 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
+  <link rel="stylesheet" href="style.css">
   <title>Painel de Registro</title>
 </head>
 <body>
-  <h2>Registrar Usuário no Banco</h2>
-  <input type="text" id="nome" placeholder="Nome" />
-  <input type="email" id="emailCadastro" placeholder="Email" />
-  <input type="password" id="senhaCadastro" placeholder="Senha" />
-  <button onclick="registrar()">Registrar</button>
-  <p id="status" style="color:green;"></p>
+  <div class="conteiner">
+    <h2>Registrar Usuário no Banco</h2>
+    <input type="text" id="nome" placeholder="Nome" />
+    <input type="password" id="senhaCadastro" placeholder="Senha" />
+    <button onclick="registrar()">Registrar</button>
+    <p id="status" style="color:green;"></p>
+  </div>
 
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
 
   <script>
-    // MESMA CONFIGURAÇÃO
+    // CONFIGURAÇÃO DO SEU PROJETO FIREBASE
     const firebaseConfig = {
-      apiKey: "AIzaSyD2iYpYWsqU_JDF0D4KdUmkdxXXft1BXB8",
-      authDomain: "fechaduradigital-6f390.firebaseapp.com",
-      databaseURL: "https://fechaduradigital-6f390-default-rtdb.firebaseio.com",
-      projectId: "fechaduradigital-6f390",
-      storageBucket: "fechaduradigital-6f390.firebasestorage.app",
-      messagingSenderId: "861590666749",
-      appId: "1:861590666749:web:2b7eca2e3385afde3fed94"
+      apiKey: "AIzaSyBSceiX4wHNKL4N_9kYkhiOJKQKE2-5Pp8",
+      authDomain: "porta-online.firebaseapp.com",
+      databaseURL: "https://porta-online-default-rtdb.firebaseio.com",
+      projectId: "porta-online",
+      storageBucket: "porta-online.firebasestorage.app",
+      messagingSenderId: "902940273784",
+      appId: "1:902940273784:web:bb1de873ca66ee0d7f518d"
     };
 
     firebase.initializeApp(firebaseConfig);
@@ -33,18 +34,21 @@
 
     function registrar() {
       const nome = document.getElementById("nome").value;
-      const email = document.getElementById("emailCadastro").value;
       const senha = document.getElementById("senhaCadastro").value;
 
-      const userId = Date.now(); // ID temporário
-      db.ref('usuarios/' + userId).set({
-        nome: nome,
-        email: email,
-        senha: senha
+      // Verificar se os campos estão vazios
+      if (!nome || !senha) {
+        document.getElementById("status").innerText = "Por favor, preencha todos os campos.";
+        return;
+      }
+
+      // Armazenar o usuário e a senha no banco de dados
+      db.ref('usuarios/' + nome).set({  // Usando o nome como chave
+        senha: senha  // Armazenando a senha no banco de dados
       }).then(() => {
         document.getElementById("status").innerText = "Usuário registrado com sucesso!";
       }).catch(error => {
-        document.getElementById("status").innerText = "Erro: " + error.message;
+        document.getElementById("status").innerText = "Erro ao salvar dados no banco: " + error.message;
       });
     }
   </script>
